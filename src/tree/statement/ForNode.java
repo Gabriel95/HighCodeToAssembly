@@ -6,6 +6,9 @@ package tree.statement;
 
 
 import java.util.List;
+
+import codegeneration.ExpressionCode;
+import codegeneration.LabelGenerator;
 import tree.expression.ExpressionNode;
 import tree.expression.IdNode;
 
@@ -77,8 +80,29 @@ public class ForNode extends StatementNode{
     }
 
     @Override
-    public String generateCode() {
-        return null;
+    public String generateCode()
+    {
+        String forLabel = LabelGenerator.getInstance().generateLabel("for");
+        String outForLabel = LabelGenerator.getInstance().generateLabel("outer_for");
+        ExpressionCode idCode = id.GenerateCode();
+        ExpressionCode initCode = initialValue.GenerateCode();
+        ExpressionCode finalCode = finalValue.GenerateCode();
+
+        String toReturn = idCode.getCode() + initCode.getCode() +
+                "mov eax,"+initCode.getDestination()+"\n"+
+                "mov "+idCode.getDestination()+",eax\n" +
+                finalCode.getCode()+
+                forLabel + ":\n"+
+                "mov eax, " + finalCode.getDestination()+"\n"+
+                "cmp " + idCode.getDestination() + ", eax\n"+
+                "jge " + outForLabel + "\n";
+
+        for(StatementNode statementNode : this.statements)
+        {
+            toReturn += statementNode.generateCode();
+        }
+        toReturn += "inc " +idCode.getDestination()+ "\njmp " + forLabel + "\n" + outForLabel + ":\n";
+        return toReturn;
     }
 
 }

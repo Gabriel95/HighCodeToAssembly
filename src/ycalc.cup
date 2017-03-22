@@ -30,11 +30,11 @@ parser code {:
 
     public HashMap<String,Integer> vars = new HashMap<String,Integer>();
 :};   
-terminal           SEMI, PLUS, MINUS, TIMES, DIVIDE, LPAREN, RPAREN, EQUALS, PRINT, IF, LCURLY, RCURLY, ELSE, WHILE, LBRACK, RBRACK, OF;
+terminal           SEMI, PLUS, MINUS, TIMES, DIVIDE, LPAREN, RPAREN, EQUALS, PRINT, IF, LCURLY, RCURLY, ELSE, WHILE, LBRACK, RBRACK, OF, SCANF;
 terminal            FOR,TO,INTEGER,FLOAT,CHAR,BOOLEAN,STRING, ARRAY;
 terminal Integer   NUMBER;
 terminal String   ID;
-terminal GREATERTHAN, LESSTHAN, LESSOREQUALTHAN, GREATEROREQUALTHAN, EQUALSEQUALS, NOTEQUALS; 
+terminal GREATERTHAN, LESSTHAN, LESSOREQUALTHAN, GREATEROREQUALTHAN, EQUALSEQUALS, NOTEQUALS;
 
 non terminal Object declaration_list,type;
 non terminal List<StatementNode>    program, statement_list;
@@ -42,15 +42,15 @@ non terminal StatementNode statement;
 non terminal ExpressionNode    expr, factor, term, sumfactor;
 non terminal IdNode id;
 non terminal List<ExpressionNode> index_list;
-   
+
 
     program ::= declaration_list statement_list:sl {:RESULT = sl;  :}
     ;
-    
+
     declaration_list ::= type ID SEMI declaration_list
     |
     ;
-    
+
     type ::= INTEGER
             | FLOAT
             | CHAR
@@ -60,7 +60,9 @@ non terminal List<ExpressionNode> index_list;
             ;
    statement_list ::= statement_list:xD statement:xP {:  xD.add(xP); RESULT = xD; :}
                  | {: List<StatementNode> nodeList = new ArrayList<StatementNode>(); RESULT = nodeList; :}
+                  ;
    statement ::= PRINT expr:e SEMI {:  RESULT = new PrintNode(e); :}
+                 | SCANF expr:e SEMI {: RESULT = new ScanNode(e); :}
                  | id:i EQUALS expr:e SEMI {: RESULT = new AssignNode(e, i); :}
                  | IF LPAREN expr:e RPAREN LCURLY statement_list:s RCURLY {: RESULT = new IfNode(e,s,null); :}
                  | IF LPAREN expr:e RPAREN LCURLY statement_list:s RCURLY ELSE LCURLY statement_list:s2 RCURLY {: RESULT = new IfNode(e,s,s2); :}
@@ -77,7 +79,7 @@ non terminal List<ExpressionNode> index_list;
                 | expr:e NOTEQUALS sumfactor:f {: RESULT = new NotEqualsNode(f,e); :}
                 | sumfactor:f {: RESULT = f; :}
                 ;
-   
+
    sumfactor ::= sumfactor:e PLUS factor:f
                  {: RESULT = new SumNode(f,e); :}
                  |sumfactor:e MINUS factor:f
@@ -95,7 +97,7 @@ non terminal List<ExpressionNode> index_list;
                  term:t
                  {: RESULT = t; :}
                  ;
-   
+
    term      ::= LPAREN expr:e RPAREN
                  {: RESULT = e; :}
                  |
@@ -107,7 +109,7 @@ non terminal List<ExpressionNode> index_list;
                  ;
 
    id        ::= ID:i index_list:il {:RESULT = new IdNode(il, i);:};
-                
+
    index_list ::= LBRACK expr:e RBRACK index_list:il {:il.add(0, e); RESULT = il;:}
                 | {:RESULT = new ArrayList<ExpressionNode>();:}
                 ;

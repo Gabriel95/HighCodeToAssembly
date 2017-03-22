@@ -1,6 +1,7 @@
 package codegeneration;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by mac on 11/24/14.
@@ -33,8 +34,25 @@ public class VariableGenerator
         return newVariableName;
     }
 
+    public boolean checkIfVariableExist(String name)
+    {
+        for(VariableDeclaration var : getInstance().variables)
+        {
+            if(var.name.equals(name))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
 
+    public void declareIntVariable(String nom) {
+        variables.add(new VariableDeclaration(nom,"dd","0"));
+    }
 
-
+    public List<VariableDeclaration> getVariables()
+    {
+        return getInstance().variables;
+    }
 }

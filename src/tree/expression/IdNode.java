@@ -6,6 +6,8 @@ package tree.expression;
 
 
 import codegeneration.ExpressionCode;
+import codegeneration.VariableDeclaration;
+import codegeneration.VariableGenerator;
 
 import java.util.List;
 
@@ -58,7 +60,13 @@ public class IdNode extends ExpressionNode{
 
     @Override
     public ExpressionCode GenerateCode() {
-        return new ExpressionCode("","[@"+name+"@]");
+
+        String nom = "@" + name + "@";
+        if(!VariableGenerator.getInstance().checkIfVariableExist(nom))
+        {
+            VariableGenerator.getInstance().declareIntVariable(nom);
+        }
+        return new ExpressionCode("","["+nom+"]");
     }
 
     public void setValue(float evaluate) {

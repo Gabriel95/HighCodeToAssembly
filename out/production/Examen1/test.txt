@@ -1,8 +1,7 @@
 A = 40;
-B = 5;
-
-while(A > B)
+B = 5 + 5 + 5;
+for(i = 0 to 10)
 {
+    scanf A;
    purinto A;
-   A = A / 2;
 }
