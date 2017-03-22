@@ -26,7 +26,7 @@ public class LessOrEqualsThanNode extends BinaryOperatorNode{
     {
         ExpressionCode raitoCode = raito.GenerateCode();
         ExpressionCode leftouCode = leftou.GenerateCode();
-        String code = "cmp " + leftouCode.getDestination() + ", " + raitoCode.getDestination()
+        String code = "mov eax," + raitoCode.getDestination() + "\ncmp " + leftouCode.getDestination() + ", eax"
                 + "\njle ";
         return new ExpressionCode(code,"");
     }

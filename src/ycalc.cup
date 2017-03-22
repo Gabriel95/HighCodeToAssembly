@@ -60,7 +60,6 @@ non terminal List<ExpressionNode> index_list;
             ;
    statement_list ::= statement_list:xD statement:xP {:  xD.add(xP); RESULT = xD; :}
                  | {: List<StatementNode> nodeList = new ArrayList<StatementNode>(); RESULT = nodeList; :}
-                  ;
    statement ::= PRINT expr:e SEMI {:  RESULT = new PrintNode(e); :}
                  | id:i EQUALS expr:e SEMI {: RESULT = new AssignNode(e, i); :}
                  | IF LPAREN expr:e RPAREN LCURLY statement_list:s RCURLY {: RESULT = new IfNode(e,s,null); :}

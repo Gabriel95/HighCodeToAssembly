@@ -5,6 +5,8 @@
 package tree.statement;
 
 import java.util.List;
+
+import codegeneration.LabelGenerator;
 import tree.expression.ExpressionNode;
 
 /**
@@ -51,8 +53,20 @@ public class WhileNode extends StatementNode{
     }
 
     @Override
-    public String generateCode() {
-        return null;
+    public String generateCode()
+    {
+        String whileLabel = LabelGenerator.getInstance().generateLabel("while");
+        String bodyLabel = LabelGenerator.getInstance().generateLabel("while_body");
+        String outLabel = LabelGenerator.getInstance().generateLabel("out_while");
+        String cond = condition.GenerateCode().getCode();
+        String toReturn = whileLabel + ":\n" + cond + bodyLabel + "\njmp " + outLabel + "\n" + bodyLabel + ":\n";
+        for(StatementNode statementNode : this.statements)
+        {
+            toReturn += statementNode.generateCode();
+        }
+        toReturn += "jmp " + whileLabel + "\n" + outLabel + ":\n";
+
+        return toReturn;
     }
 
 }
