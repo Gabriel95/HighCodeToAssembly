@@ -14,7 +14,8 @@ public class DataGeneration {
                             "include 'win32a.inc'\n" +
                             "section '.data' data readable writeable\n" +
                             "str_pause db  'p','a','u','s','e',0\n" +
-                            "@intprintstr db '%d',10,0\n" ;
+                            "@intprintstr db '%d',10,0\n" +
+                            "@intscanstr db '%d',0 \n" ;
         for(VariableDeclaration var : variables)
         {
             toReturn += var.getName() + " " + var.getDeclarationType() + " " + var.getValue() + "\n";
